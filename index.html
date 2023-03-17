@@ -69,4 +69,6 @@
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.type === 'ticker' && data.product_id === 'BTC-USD') {
+        btcPrice.innerHTML = `$${Number(data.price).toFixed(2)}`;
+        btcChart.data.labels.push(new Date().toLocaleTimeString());
        
