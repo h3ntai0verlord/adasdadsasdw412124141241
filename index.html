@@ -1,74 +1,25 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Live BTC & ETH Prices</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 0;
-    }
-
-    .price-card {
-      background-color: #fff;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-      border-radius: 5px;
-      padding: 20px;
-      margin: 20px;
-      width: 300px;
-      text-align: center;
-    }
-
-    .price-card h2 {
-      margin-top: 0;
-      font-size: 36px;
-      font-weight: bold;
-      color: #4CAF50;
-    }
-
-    canvas {
-      max-width: 100%;
-    }
-  </style>
-</head>
-<body>
-  <h1 style="text-align: center;">Live BTC & ETH Prices</h1>
-  <div style="display: flex; justify-content: center;">
-    <div class="price-card">
-      <h2>BTC Price</h2>
-      <canvas id="btc-chart"></canvas>
-      <p id="btc-price"></p>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live BTC & ETH Prices</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Live BTC & ETH Prices</h1>
+    <div class="price-cards">
+      <div class="price-card btc">
+        <h2>BTC Price</h2>
+        <canvas id="btc-chart"></canvas>
+        <p id="btc-price"></p>
+      </div>
+      <div class="price-card eth">
+        <h2>ETH Price</h2>
+        <canvas id="eth-chart"></canvas>
+        <p id="eth-price"></p>
+      </div>
     </div>
-    <div class="price-card">
-      <h2>ETH Price</h2>
-      <canvas id="eth-chart"></canvas>
-      <p id="eth-price"></p>
-    </div>
-  </div>
-  <script>
-    const btcChart = new Chart(document.getElementById('btc-chart').getContext('2d'), {
-      type: 'line',
-      data: { labels: [], datasets: [{ label: 'BTC Price', data: [], backgroundColor: 'rgba(76, 175, 80, 0.2)', borderColor: 'rgba(76, 175, 80, 1)', borderWidth: 2, pointRadius: 0 }] },
-      options: { responsive: true, maintainAspectRatio: false, scales: { yAxes: [{ ticks: { beginAtZero: false } }] } }
-    });
-
-    const ethChart = new Chart(document.getElementById('eth-chart').getContext('2d'), {
-      type: 'line',
-      data: { labels: [], datasets: [{ label: 'ETH Price', data: [], backgroundColor: 'rgba(33, 150, 243, 0.2)', borderColor: 'rgba(33, 150, 243, 1)', borderWidth: 2, pointRadius: 0 }] },
-      options: { responsive: true, maintainAspectRatio: false, scales: { yAxes: [{ ticks: { beginAtZero: false } }] } }
-    });
-
-    const btcPrice = document.getElementById('btc-price');
-    const ethPrice = document.getElementById('eth-price');
-
-    const ws = new WebSocket('wss://ws-feed.pro.coinbase.com');
-    ws.onopen = () => { ws.send(JSON.stringify({ type: 'subscribe', product_ids: ['BTC-USD', 'ETH-USD'], channels: ['ticker'] })); };
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'ticker' && data.product_id === 'BTC-USD') {
-        btcPrice.innerHTML = `$${Number(data.price).toFixed(2)}`;
-        btcChart.data.labels.push(new Date().toLocaleTimeString());
-       
+    <script src="app.js"></script>
+  </body>
+</html>
